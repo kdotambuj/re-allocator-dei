@@ -16,7 +16,7 @@ const app:Express = express();
 const PORT = process.env.PORT || 8000
 
 const corsOptions = {
-    origin: ['http://localhost:3000', 'https://your-production-domain.com'],
+    origin: ['http://localhost:3000', 'https://re-allocator-dei.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE','OPTIONS'], 
     allowedHeaders: ["Content-Type", "Authorization"], // Allow necessary headers
     credentials: true, 
@@ -35,6 +35,8 @@ app.use('/api/v1',departmentRoutes)
 app.use('/api/v1',resourceRoutes)
 app.use('/api/v1',ticketRoutes)
 app.use('/api/v1',approavalRoutes)
+
+app.options("*", cors()); // Allow all OPTIONS preflight requests
 
 
 app.listen(PORT,()=>{
