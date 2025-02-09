@@ -3,12 +3,12 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import userRoutes from './routes/user.route'
-import authRoutes from './routes/auth.route'
-import departmentRoutes from './routes/department.route'
-import resourceRoutes from './routes/resource.route'
-import ticketRoutes from './routes/ticket.route'
-import approavalRoutes from './routes/approval.route'
+import userRoutes from './routes/user.route.js'
+import authRoutes from './routes/auth.route.js'
+import departmentRoutes from './routes/department.route.js'
+import resourceRoutes from './routes/resource.route.js'
+import ticketRoutes from './routes/ticket.route.js'
+import approavalRoutes from './routes/approval.route.js'
 
 dotenv.config()
 
