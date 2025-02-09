@@ -15,25 +15,24 @@ const generateTokenAndSetCookie = (user: User, res: Response): void => {
   }
 
   const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, {
-    expiresIn: '24h',
+    expiresIn: "24h",
   });
 
   const { password, ...userWithoutSensitiveData } = user;
 
- // HTTP-only cookie
+  // Set HTTP-only secure cookie
   res
-    .cookie('jwt', token, {
-      maxAge: 24 * 60 * 60 * 1000,
-      httpOnly: false, // Prevent XSS attacks
-      sameSite: 'strict', // Prevent CSRF attacks
-      secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+    .cookie("jwt", token, {
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      httpOnly: true, // Prevent JavaScript access
+      sameSite: "none", // Allow cross-site requests
+      secure: true, // Ensure HTTPS (Render uses HTTPS by default)
     })
     .status(200)
     .json({
       success: true,
       data: {
         user: userWithoutSensitiveData,
-        token,
       },
       message: "Signed in successfully",
     });
