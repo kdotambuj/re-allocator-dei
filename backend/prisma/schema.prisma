@@ -1,8 +1,4 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client-js"
@@ -13,7 +9,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role{
+
+enum Role {
   STUDENT
   PROFESSOR
   HOD
@@ -21,12 +18,79 @@ enum Role{
   ADMIN
 }
 
-model User{
-  id       String   @id @default(cuid())
-  email    String   @unique
-  name     String?
-  password String
-  role     Role
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model User {
+  id           String      @id @default(cuid())
+  email        String      @unique
+  name         String?
+  password     String
+  role         Role
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  departmentId Int?
+  department   Department? @relation(fields: [departmentId], references: [id])
+  hodOf        Department? @relation("HodRelation") // Explicit back-relation for HOD
+  tickets      Ticket[]    @relation("UserTickets")
+  approvals    Approval[]  @relation("HodApprovals")
+}
+
+model Department {
+  id        Int        @id
+  name      String
+  hodId     String     @unique
+  hod       User       @relation("HodRelation", fields: [hodId], references: [id])
+  resources Resource[] @relation("DepartmentResources")
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  User      User[]
+  Ticket    Ticket[]
+}
+
+model Resource {
+  id           String     @id @default(cuid())
+  name         String
+  description  String?
+  type         String?
+  quantity     Int
+  available    Boolean
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  departmentId Int
+  department   Department @relation("DepartmentResources", fields: [departmentId], references: [id])
+  tickets      Ticket[]   @relation("ResourceTickets")
+
+  @@unique(fields: [name, departmentId], name: "department_resource")
+}
+
+model Ticket {
+  id                String       @id @default(cuid())
+  userId            String
+  user              User         @relation("UserTickets", fields: [userId], references: [id])
+  resourceId        String
+  resource          Resource     @relation("ResourceTickets", fields: [resourceId], references: [id])
+  departmentId      Int
+  department        Department   @relation(fields: [departmentId], references: [id])
+  requestedQuantity Int
+  status            TicketStatus @default(PENDING)
+  startTime         DateTime
+  endTime           DateTime
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  approval          Approval?    @relation("TicketApproval")
+}
+
+model Approval {
+  id         String       @id @default(cuid())
+  ticketId   String       @unique
+  ticket     Ticket       @relation("TicketApproval", fields: [ticketId], references: [id])
+  hodId      String
+  hod        User         @relation("HodApprovals", fields: [hodId], references: [id])
+  status     TicketStatus
+  decisionAt DateTime     @default(now())
+}
+
+enum TicketStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  COMPLETED
 }

@@ -10,6 +10,7 @@ const createUserSchema = z.object({
     email: z.string().email("Invalid Email Format").nonempty("Email must be there"),
     password: z.string().min(6,"Password must be atleast 6 characters long"),
     role: z.enum(["ADMIN","STUDENT","PROFESSOR","LAB_ASSISTANT","HOD"]),
+    departmentId: z.number().int("Number only").positive()
 })
 
 
@@ -21,7 +22,7 @@ export const createUser = async (req: Request, res: Response):Promise<any> => {
             return res.status(400).json({ success: false, error: parsed.error.errors })
         } 
 
-        const {name,email,password,role} = parsed.data;
+        const {name,email,password,role,departmentId} = parsed.data;
 
         const existingUser = await prisma.user.findUnique({
             where:{ email }
@@ -40,13 +41,15 @@ export const createUser = async (req: Request, res: Response):Promise<any> => {
                 name,
                 email,
                 password: hashedPassword,
-                role
+                role,
+                departmentId
             },
             select:{
                 id: true,
                 name: true,
                 email: true,
                 role: true,
+                departmentId: true,
                 createdAt: true,
             }
         });
@@ -64,4 +67,35 @@ export const createUser = async (req: Request, res: Response):Promise<any> => {
         return res.status(500).json({ success: false, message: "Internal Server Error" });
     }
     
+}
+
+
+export const getAllUsers = async (req:Request,res:Response):Promise<any>=>{
+
+    try{
+
+
+        const users = await prisma.user.findMany({
+            include:{
+                department: true
+            }
+        });
+
+        if (!users){
+            return res.status(404).json({ success: false, message: "No users found" });
+        }
+
+
+        return res.status(201).json({ success: true, data: users, message: "Users fetched successfully" });
+
+
+
+    }
+    catch(error){
+        console.error("Error in createUser:", error);
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+
+
+
 }

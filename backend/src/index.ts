@@ -5,6 +5,10 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import userRoutes from './routes/user.route'
 import authRoutes from './routes/auth.route'
+import departmentRoutes from './routes/department.route'
+import resourceRoutes from './routes/resource.route'
+import ticketRoutes from './routes/ticket.route'
+import approavalRoutes from './routes/approval.route'
 
 dotenv.config()
 
@@ -13,9 +17,11 @@ const PORT = process.env.PORT || 8000
 
 const corsOptions = {
     origin: ['http://localhost:3000', 'https://your-production-domain.com'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], 
+    methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE','OPTIONS'], 
+    allowedHeaders: ["Content-Type", "Authorization"], // Allow necessary headers
     credentials: true, 
 };
+
 
 app.use(cors(corsOptions));
 app.use(express.json()) 
@@ -25,6 +31,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // api routes
 app.use('/api/v1',userRoutes)
 app.use('/api/v1',authRoutes)
+app.use('/api/v1',departmentRoutes)
+app.use('/api/v1',resourceRoutes)
+app.use('/api/v1',ticketRoutes)
+app.use('/api/v1',approavalRoutes)
 
 
 app.listen(PORT,()=>{
