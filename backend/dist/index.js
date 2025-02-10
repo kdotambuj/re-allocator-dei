@@ -18,7 +18,7 @@ dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 8000;
 const corsOptions = {
-    origin: ['http://localhost:3000', 'https://your-production-domain.com'],
+    origin: ['http://localhost:3000', 'https://re-allocator-dei.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ["Content-Type", "Authorization"], // Allow necessary headers
     credentials: true,
@@ -34,6 +34,7 @@ app.use('/api/v1', department_route_js_1.default);
 app.use('/api/v1', resource_route_js_1.default);
 app.use('/api/v1', ticket_route_js_1.default);
 app.use('/api/v1', approval_route_js_1.default);
+app.options("*", (0, cors_1.default)()); // Allow all OPTIONS preflight requests
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

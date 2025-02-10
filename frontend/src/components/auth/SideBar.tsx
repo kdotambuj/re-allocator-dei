@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button"
 import Image from 'next/image'
 import { motion } from "framer-motion"
 import { Audiowide } from 'next/font/google'
+import { Lexend } from 'next/font/google'
 
-const audiowide = Audiowide({ subsets: ['latin'], weight: '400' })
+const lexend = Lexend({ subsets: ['latin'], weight: '400' })
 
 
 export function Sidebar() {
@@ -25,7 +26,7 @@ export function Sidebar() {
 
     <div className='flex items-center justify-center flex-col p-5'>
 
-     <h1 className={`font-bold  text-3xl ${audiowide.className}`}>Re-allocator</h1>
+    <h1 className={`font-bold text-3xl ${lexend.className}`}>Re-allocator</h1>
 
       <h2 className='mt-5 font-bold text-xl'>Unlock Potential Through Smart Sharing.</h2>
      <h2 className='text-sm mt-3'>Resource Sharing & Management at ease</h2>

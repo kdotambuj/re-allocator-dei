@@ -10,7 +10,7 @@ const createUserSchema = z.object({
     email: z.string().email("Invalid Email Format").nonempty("Email must be there"),
     password: z.string().min(6,"Password must be atleast 6 characters long"),
     role: z.enum(["ADMIN","STUDENT","PROFESSOR","LAB_ASSISTANT","HOD"]),
-    departmentId: z.number().int("Number only").positive()
+    departmentId: z.number().int("Number only").positive().optional()
 })
 
 
@@ -97,5 +97,38 @@ export const getAllUsers = async (req:Request,res:Response):Promise<any>=>{
     }
 
 
+
+}
+
+
+export const updateUserDepartmentId = async (req:Request,res:Response):Promise<any>=>{
+
+    try{
+        const {userId,departmentId} = req.body;
+
+        const updatedUser = await prisma.user.update({
+            where:{
+                id: userId
+            },
+            data:{
+                departmentId
+            },
+            select:{
+                id:true,
+                name:true,
+                email:true,
+                role:true,
+                departmentId:true,
+                createdAt:true
+            }
+        });
+
+        return res.status(201).json({ success: true, data: updatedUser, message: "User updated successfully" });
+
+    }
+    catch(error){
+        console.error("Error in createUser:", error);
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
 
 }

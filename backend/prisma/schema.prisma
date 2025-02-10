@@ -71,8 +71,9 @@ model Ticket {
   department        Department   @relation(fields: [departmentId], references: [id])
   requestedQuantity Int
   status            TicketStatus @default(PENDING)
-  startTime         DateTime
-  endTime           DateTime
+  startTime         String?       // HH:MM
+  endTime           String?       // HH:MM
+  date              String?       // DD-MM-YYYY
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
   approval          Approval?    @relation("TicketApproval")

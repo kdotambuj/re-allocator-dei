@@ -21,23 +21,22 @@ const generateTokenAndSetCookie = (user, res) => {
         throw new Error("JWT_SECRET environment variable is not set!");
     }
     const token = jsonwebtoken_1.default.sign({ userId: user.id, role: user.role }, JWT_SECRET, {
-        expiresIn: '24h',
+        expiresIn: "24h",
     });
     const { password } = user, userWithoutSensitiveData = __rest(user, ["password"]);
-    // HTTP-only cookie
+    // Set HTTP-only secure cookie
     res
-        .cookie('jwt', token, {
-        maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: false, // Prevent XSS attacks
-        sameSite: 'strict', // Prevent CSRF attacks
-        secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+        .cookie("jwt", token, {
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+        httpOnly: true, // Prevent JavaScript access
+        sameSite: "none", // Allow cross-site requests
+        secure: true, // Ensure HTTPS (Render uses HTTPS by default)
     })
         .status(200)
         .json({
         success: true,
         data: {
             user: userWithoutSensitiveData,
-            token,
         },
         message: "Signed in successfully",
     });

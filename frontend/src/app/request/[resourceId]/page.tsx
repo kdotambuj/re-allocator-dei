@@ -84,7 +84,7 @@ const RequestPage = () => {
 
   const fetchAvailability = async () => {
     try {
-      var date = format(selectedDate || new Date(), "yyyy-MM-dd")
+      var date = format(selectedDate || new Date(), "dd-MM-yyyy")
      
 
       const response = await axios.get(
@@ -210,19 +210,17 @@ const RequestPage = () => {
     }
 
     try {
-      const [startTime, endTime] = selectedSlot.split(" - ")
+    
 
-      const startTimeISO = format(new Date(selectedDate || new Date()), "yyyy-MM-dd") + "T" + startTime + ":00"
-      const endTimeISO = format(new Date(selectedDate || new Date()), "yyyy-MM-dd") + "T" + endTime + ":00"
-
-
-
+      const date = format(selectedDate || new Date(), "dd-MM-yyyy")
+     
       const ticketDetails = {
         userId: user.id,
         departmentId: resource.departmentId,
         requestedQuantity,
-        startTime: startTimeISO,
-        endTime: endTimeISO,
+        startTime: startTime,
+        endTime: endTime,
+        date: date,
       }
 
       const response = await axios.post(

@@ -14,7 +14,7 @@ const StudentDashboard = ()=>{
 
     const user = useAppSelector((state) => state.user);
 
-    if (user.role !== "STUDENT" && user.role !== "ADMIN") {
+    if (user.role !== "STUDENT") {
         return <NoAccessPage />
     }
 

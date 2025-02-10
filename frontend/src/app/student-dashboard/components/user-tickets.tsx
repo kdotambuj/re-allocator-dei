@@ -16,6 +16,7 @@ interface Ticket {
   departmentId: string
   startTime: string
   endTime: string
+  date:string
   createdAt: string
 }
 
@@ -65,9 +66,10 @@ const CompactUserTickets = () => {
                   <th className="p-2">Resource</th>
                   <th className="p-2">Status</th>
                   <th className="p-2">Quantity</th>
+                  <th className="p-2">Date</th>
                   <th className="p-2">Start</th>
                   <th className="p-2">End</th>
-                  <th className="p-2">Created</th>
+                  <th className="p-2">Created At</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -89,13 +91,16 @@ const CompactUserTickets = () => {
                     </td>
                     <td className="p-2 whitespace-nowrap text-sm text-gray-500">{ticket.requestedQuantity}</td>
                     <td className="p-2 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(ticket.startTime).toLocaleString([], { dateStyle: "short", timeStyle: "short" })}
+                      {ticket.date}
                     </td>
                     <td className="p-2 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(ticket.endTime).toLocaleString([], { dateStyle: "short", timeStyle: "short" })}
+                      {ticket.startTime}
                     </td>
                     <td className="p-2 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(ticket.createdAt).toLocaleString([], { dateStyle: "short", timeStyle: "short" })}
+                      {ticket.endTime}
+                    </td>
+                    <td className="p-2 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(ticket.createdAt).toLocaleString()}
                     </td>
                   </tr>
                 ))}

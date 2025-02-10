@@ -28,8 +28,10 @@ interface Ticket {
     departmentId: number;
     requestedQuantity: number;
     status: string;
-    startTime: Date;
-    endTime: Date;
+    startTime: string;
+    endTime: string;
+    date: string;
+    createdAt: string;
 }
 
 const HodDashboard = () => {
@@ -118,9 +120,9 @@ const HodDashboard = () => {
       (statusFilter === "ALL" || ticket.status === statusFilter) &&
       (searchQuery === "" ||
         ticket.resource.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        ticket.user.name.toLowerCase().includes(searchQuery.toLowerCase())) &&
-      (dateFilter === "" || new Date(ticket.startTime).toLocaleDateString() === new Date(dateFilter).toLocaleDateString()),
-  )
+        ticket.user.name.toLowerCase().includes(searchQuery.toLowerCase()))  
+      )
+
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -186,6 +188,7 @@ const HodDashboard = () => {
                   <TableHead className="text-sm">Status</TableHead>
                   <TableHead className="text-sm">Date</TableHead>
                   <TableHead className="text-sm">Time Slot</TableHead>
+                  <TableHead className="text-sm">Created At</TableHead>
                   <TableHead className="text-sm">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -214,11 +217,11 @@ const HodDashboard = () => {
                         {ticket?.status}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-sm">{new Date(ticket?.startTime).toLocaleDateString()}</TableCell>
+                    <TableCell className="text-sm">{ticket.date}</TableCell>
                     <TableCell className="text-sm">
-                      {new Date(ticket?.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}-{" "}
-                        {new Date(ticket?.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {ticket.startTime} - {ticket.endTime}
                     </TableCell>
+                    <TableCell className="text-sm">{new Date(ticket.createdAt).toLocaleDateString('en-GB')}</TableCell>
                     <TableCell className="text-sm">
                       <div className="flex space-x-2">
                         {ticket.status === "PENDING" && (
