@@ -77,7 +77,7 @@ export const createTicket = async (req: Request, res: Response): Promise<any> =>
                 requestedQuantity,
                 startTime,
                 endTime,
-                date,
+                date:String(date),
                 status: "PENDING",
             },
         });
@@ -166,7 +166,7 @@ export const getDailyAvailability = async (req: Request, res: Response): Promise
             where: {
                 resourceId,
                 status: "APPROVED",
-                date: formattedDate, // Match the date as a string
+                date: String(formattedDate),
             },
             select: { startTime: true, endTime: true, requestedQuantity: true },
         });
