@@ -11,14 +11,14 @@ interface TicketDataCreate{
     requestedQuantity: number;
     startTime: string;
     endTime: string;
-    date: string;
+    requestedDate: string;
     resourceId: string;
 }
 
 
 interface TicketSearch{
     resourceId:string;
-    date:string;
+    requestedDate:string;
     status:TicketStatus;
 }
 
@@ -94,7 +94,7 @@ export const createTicket = async (req: Request, res: Response): Promise<any> =>
             requestedQuantity,
             startTime,
             endTime,
-            date,
+            requestedDate:date,
             resourceId
         }
 
@@ -185,7 +185,7 @@ export const getDailyAvailability = async (req: Request, res: Response): Promise
 
         const ticketQuery:TicketSearch = {
             resourceId,
-            date: formattedDate,
+            requestedDate: formattedDate,
             status: TicketStatus.APPROVED
         }
 

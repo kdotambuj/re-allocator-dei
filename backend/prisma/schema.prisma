@@ -73,7 +73,7 @@ model Ticket {
   status            TicketStatus @default(PENDING)
   startTime         String?       // HH:MM
   endTime           String?       // HH:MM
-  date              String?       // DD-MM-YYYY
+  dateRequested     String?       // DD-MM-YYYY
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
   approval          Approval?    @relation("TicketApproval")

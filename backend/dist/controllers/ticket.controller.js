@@ -65,7 +65,7 @@ const createTicket = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             requestedQuantity,
             startTime,
             endTime,
-            date,
+            requestedDate: date,
             resourceId
         };
         const ticket = yield prisma.ticket.create({
@@ -132,7 +132,7 @@ const getDailyAvailability = (req, res) => __awaiter(void 0, void 0, void 0, fun
         const formattedDate = date; // Already stored in DD-MM-YYYY format
         const ticketQuery = {
             resourceId,
-            date: formattedDate,
+            requestedDate: formattedDate,
             status: client_1.TicketStatus.APPROVED
         };
         // Fetch approved tickets for the given day
