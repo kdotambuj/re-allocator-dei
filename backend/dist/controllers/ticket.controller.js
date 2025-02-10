@@ -45,7 +45,6 @@ const prisma = new client_1.PrismaClient();
 // });
 const createTicket = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Validate request body
         // const parsed = createTicketSchema.safeParse(req.body);
         // if (!parsed.success) {
         //     return res.status(400).json({ success: false, error: parsed.error.errors });
@@ -126,7 +125,7 @@ const getDailyAvailability = (req, res) => __awaiter(void 0, void 0, void 0, fun
             return res.status(400).json({ success: false, message: "Missing resourceId or date" });
         }
         // Validate date format (expecting DD-MM-YYYY)
-        const dateParts = date.split("-");
+        const dateParts = String(date).split("-");
         if (dateParts.length !== 3) {
             return res.status(400).json({ success: false, message: "Invalid date format. Use DD-MM-YYYY" });
         }
@@ -158,10 +157,10 @@ const getDailyAvailability = (req, res) => __awaiter(void 0, void 0, void 0, fun
         tickets.forEach(ticket => {
             if (!ticket.startTime || !ticket.endTime)
                 return;
-            const startHour = parseInt(ticket.startTime.split(":")[0], 10);
-            const startMinute = parseInt(ticket.startTime.split(":")[1], 10);
-            const endHour = parseInt(ticket.endTime.split(":")[0], 10);
-            const endMinute = parseInt(ticket.endTime.split(":")[1], 10);
+            const startHour = parseInt(String(ticket.startTime).split(":")[0], 10);
+            const startMinute = parseInt(String(ticket.startTime).split(":")[1], 10);
+            const endHour = parseInt(String(ticket.endTime).split(":")[0], 10);
+            const endMinute = parseInt(String(ticket.endTime).split(":")[1], 10);
             for (let hour = startHour; hour < endHour || (hour === endHour && endMinute > 0); hour++) {
                 const timeKey = `${hour.toString().padStart(2, "0")}:00 - ${(hour + 1).toString().padStart(2, "0")}:00`;
                 if (timeSlots[timeKey] !== undefined) {

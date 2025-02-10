@@ -50,7 +50,7 @@ const prisma = new PrismaClient();
   
 export const createTicket = async (req: Request, res: Response): Promise<any> => {
     try {
-        // Validate request body
+        
         // const parsed = createTicketSchema.safeParse(req.body);
         // if (!parsed.success) {
         //     return res.status(400).json({ success: false, error: parsed.error.errors });
@@ -155,7 +155,7 @@ export const getDailyAvailability = async (req: Request, res: Response): Promise
         }
 
         // Validate date format (expecting DD-MM-YYYY)
-        const dateParts = date.split("-");
+        const dateParts = String(date).split("-");
         if (dateParts.length !== 3) {
             return res.status(400).json({ success: false, message: "Invalid date format. Use DD-MM-YYYY" });
         }
@@ -192,10 +192,10 @@ export const getDailyAvailability = async (req: Request, res: Response): Promise
         tickets.forEach(ticket => {
             if (!ticket.startTime || !ticket.endTime) return;
 
-            const startHour = parseInt(ticket.startTime.split(":")[0], 10);
-            const startMinute = parseInt(ticket.startTime.split(":")[1], 10);
-            const endHour = parseInt(ticket.endTime.split(":")[0], 10);
-            const endMinute = parseInt(ticket.endTime.split(":")[1], 10);
+            const startHour = parseInt(String(ticket.startTime).split(":")[0], 10);
+            const startMinute = parseInt(String(ticket.startTime).split(":")[1], 10);
+            const endHour = parseInt(String(ticket.endTime).split(":")[0], 10);
+            const endMinute = parseInt(String(ticket.endTime).split(":")[1], 10);
 
             for (let hour = startHour; hour < endHour || (hour === endHour && endMinute > 0); hour++) {
                 const timeKey = `${hour.toString().padStart(2, "0")}:00 - ${(hour + 1).toString().padStart(2, "0")}:00`;
