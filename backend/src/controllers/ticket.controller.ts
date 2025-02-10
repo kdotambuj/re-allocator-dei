@@ -1,6 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, TicketStatus } from "@prisma/client";
 import { Request,Response } from "express";
-import { Ticket } from "lucide-react";
 import {z} from 'zod';
 
 const prisma = new PrismaClient();
@@ -14,6 +13,13 @@ interface TicketDataCreate{
     endTime: string;
     date: string;
     resourceId: string;
+}
+
+
+interface TicketSearch{
+    resourceId:string;
+    date:string;
+    status:TicketStatus;
 }
 
 
@@ -176,13 +182,16 @@ export const getDailyAvailability = async (req: Request, res: Response): Promise
         }
         const formattedDate:string = date; // Already stored in DD-MM-YYYY format
 
+
+        const ticketQuery:TicketSearch = {
+            resourceId,
+            date: formattedDate,
+            status: TicketStatus.APPROVED
+        }
+
         // Fetch approved tickets for the given day
         const tickets = await prisma.ticket.findMany({
-            where: {
-            resourceId,
-            status: "APPROVED",
-            date: formattedDate,
-            },
+            where: ticketQuery,
             select: { startTime: true, endTime: true, requestedQuantity: true },
         });
 

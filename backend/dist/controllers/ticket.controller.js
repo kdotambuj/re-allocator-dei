@@ -59,16 +59,17 @@ const createTicket = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             return res.status(404).json({ success: false, message: "Resource not found" });
         }
         // Create the ticket without checking time slot availability
+        var ticketToBeAdded = {
+            userId,
+            departmentId,
+            requestedQuantity,
+            startTime,
+            endTime,
+            date,
+            resourceId
+        };
         const ticket = yield prisma.ticket.create({
-            data: {
-                userId,
-                resourceId,
-                departmentId,
-                requestedQuantity,
-                startTime,
-                endTime,
-                date
-            }
+            data: ticketToBeAdded
         });
         return res.status(201).json({
             success: true,
@@ -129,13 +130,14 @@ const getDailyAvailability = (req, res) => __awaiter(void 0, void 0, void 0, fun
             return res.status(400).json({ success: false, message: "Invalid date format. Use DD-MM-YYYY" });
         }
         const formattedDate = date; // Already stored in DD-MM-YYYY format
+        const ticketQuery = {
+            resourceId,
+            date: formattedDate,
+            status: client_1.TicketStatus.APPROVED
+        };
         // Fetch approved tickets for the given day
         const tickets = yield prisma.ticket.findMany({
-            where: {
-                resourceId,
-                status: "APPROVED",
-                date: String(formattedDate),
-            },
+            where: ticketQuery,
             select: { startTime: true, endTime: true, requestedQuantity: true },
         });
         // Get total resource quantity
