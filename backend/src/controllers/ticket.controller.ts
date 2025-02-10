@@ -1,8 +1,20 @@
 import { PrismaClient } from "@prisma/client";
 import { Request,Response } from "express";
+import { Ticket } from "lucide-react";
 import {z} from 'zod';
 
 const prisma = new PrismaClient();
+
+
+interface TicketDataCreate{
+    userId: string;
+    departmentId: number;
+    requestedQuantity: number;
+    startTime: string;
+    endTime: string;
+    date: string;
+    resourceId: string;
+}
 
 
 // const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/; // Matches 00:00 - 23:59
@@ -69,18 +81,21 @@ export const createTicket = async (req: Request, res: Response): Promise<any> =>
         }
 
         // Create the ticket without checking time slot availability
+
+        var ticketToBeAdded:TicketDataCreate = {
+            userId,
+            departmentId,
+            requestedQuantity,
+            startTime,
+            endTime,
+            date,
+            resourceId
+        }
+
         const ticket = await prisma.ticket.create({
-            data: {
-                userId,
-                resourceId,
-                departmentId,
-                requestedQuantity,
-                startTime,
-                endTime,
-                date:String(date),
-                status: "PENDING",
-            },
-        });
+           data:ticketToBeAdded
+        })
+       
 
         return res.status(201).json({ 
             success: true, 
@@ -159,14 +174,14 @@ export const getDailyAvailability = async (req: Request, res: Response): Promise
         if (dateParts.length !== 3) {
             return res.status(400).json({ success: false, message: "Invalid date format. Use DD-MM-YYYY" });
         }
-        const formattedDate = date; // Already stored in DD-MM-YYYY format
+        const formattedDate:string = date; // Already stored in DD-MM-YYYY format
 
         // Fetch approved tickets for the given day
         const tickets = await prisma.ticket.findMany({
             where: {
-                resourceId,
-                status: "APPROVED",
-                date: String(formattedDate),
+            resourceId,
+            status: "APPROVED",
+            date: formattedDate,
             },
             select: { startTime: true, endTime: true, requestedQuantity: true },
         });

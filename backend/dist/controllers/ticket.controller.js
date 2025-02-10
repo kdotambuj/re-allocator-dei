@@ -67,9 +67,8 @@ const createTicket = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                 requestedQuantity,
                 startTime,
                 endTime,
-                date,
-                status: "PENDING",
-            },
+                date
+            }
         });
         return res.status(201).json({
             success: true,
@@ -135,7 +134,7 @@ const getDailyAvailability = (req, res) => __awaiter(void 0, void 0, void 0, fun
             where: {
                 resourceId,
                 status: "APPROVED",
-                date: formattedDate, // Match the date as a string
+                date: String(formattedDate),
             },
             select: { startTime: true, endTime: true, requestedQuantity: true },
         });
