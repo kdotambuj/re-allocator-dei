@@ -16,7 +16,7 @@ interface Ticket {
   departmentId: string
   startTime: string
   endTime: string
-  date:string
+  dateRequested:string
   createdAt: string
 }
 
@@ -66,7 +66,7 @@ const CompactUserTickets = () => {
                   <th className="p-2">Resource</th>
                   <th className="p-2">Status</th>
                   <th className="p-2">Quantity</th>
-                  <th className="p-2">Date</th>
+                  <th className="p-2">Date Requested</th>
                   <th className="p-2">Start</th>
                   <th className="p-2">End</th>
                   <th className="p-2">Created At</th>
@@ -91,7 +91,7 @@ const CompactUserTickets = () => {
                     </td>
                     <td className="p-2 whitespace-nowrap text-sm text-gray-500">{ticket.requestedQuantity}</td>
                     <td className="p-2 whitespace-nowrap text-sm text-gray-500">
-                      {ticket.date}
+                      {ticket.dateRequested}
                     </td>
                     <td className="p-2 whitespace-nowrap text-sm text-gray-500">
                       {ticket.startTime}

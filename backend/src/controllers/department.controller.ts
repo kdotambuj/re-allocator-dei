@@ -72,11 +72,13 @@ export const getAllDepartments = async (req:Request,res:Response):Promise<any>=>
 
     try{
         const departments = await prisma.department.findMany({
-            select:{
-                id:true,
-                name:true,
-                hodId:true,
-                createdAt:true
+            include:{
+                hod:{
+                    select:{
+                        name:true,
+                        email:true
+                    }
+                }
             }
         });
 

@@ -1,5 +1,6 @@
 "use client"
 
+import { useAppSelector } from "@/lib/store/hooks"
 import { motion } from "framer-motion"
 import { Box, Package, Share2 } from "lucide-react"
 import { Lexend } from "next/font/google"
@@ -8,7 +9,35 @@ import Link from "next/link"
 
 const lexend = Lexend({ subsets: ['latin'], weight: '400' })
 
+
+
+
+
 export default function Header() {
+
+
+  const user = useAppSelector((state) => state.user)
+
+  var dashboardRoute = '/auth/login'
+
+  switch (user.role) {
+    case 'ADMIN':
+      dashboardRoute = '/admin-dashboard'
+      break
+    case 'STUDENT':
+      dashboardRoute = '/student-dashboard'
+      break
+    case 'HOD':
+      dashboardRoute = '/hod-dashboard'
+      break
+    default:
+      dashboardRoute = '/auth/login'
+      break
+  }
+
+
+
+
   return (
     <motion.header
       className="py-4 px-6 flex justify-between items-center border-b border-black"
@@ -22,6 +51,11 @@ export default function Header() {
       </Link>
       <nav>
         <ul className="flex items-center gap-8">
+        <li>
+            <Link href={dashboardRoute} className="text-sm  hover:underline">
+              Dashboard
+            </Link>
+          </li>
           <li>
             <Link href="#features" className="text-sm  hover:underline">
               Features

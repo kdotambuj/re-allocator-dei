@@ -30,7 +30,7 @@ interface Ticket {
     status: string;
     startTime: string;
     endTime: string;
-    date: string;
+    dateRequested: string;
     createdAt: string;
 }
 
@@ -186,7 +186,7 @@ const HodDashboard = () => {
                   <TableHead className="text-sm">Requested By</TableHead>
                   <TableHead className="text-sm">Quantity</TableHead>
                   <TableHead className="text-sm">Status</TableHead>
-                  <TableHead className="text-sm">Date</TableHead>
+                  <TableHead className="text-sm">Date Requested</TableHead>
                   <TableHead className="text-sm">Time Slot</TableHead>
                   <TableHead className="text-sm">Created At</TableHead>
                   <TableHead className="text-sm">Actions</TableHead>
@@ -217,7 +217,7 @@ const HodDashboard = () => {
                         {ticket?.status}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-sm">{ticket.date}</TableCell>
+                    <TableCell className="text-sm">{ticket.dateRequested}</TableCell>
                     <TableCell className="text-sm">
                       {ticket.startTime} - {ticket.endTime}
                     </TableCell>

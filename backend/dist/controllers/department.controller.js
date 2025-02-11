@@ -58,11 +58,13 @@ exports.createDepartment = createDepartment;
 const getAllDepartments = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const departments = yield prisma.department.findMany({
-            select: {
-                id: true,
-                name: true,
-                hodId: true,
-                createdAt: true
+            include: {
+                hod: {
+                    select: {
+                        name: true,
+                        email: true
+                    }
+                }
             }
         });
         if (!departments) {
