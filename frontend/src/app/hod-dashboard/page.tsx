@@ -45,6 +45,10 @@ const HodDashboard = () => {
   const [loading, setLoading] = useState(false);
   const [updatingStatus, setUpdatingStatus] = useState({status:false,message:""});
 
+  const [filteredTickets, setFilteredTickets] = useState<Ticket[]>([])
+
+
+
   if (user.role !== "HOD" && user.role !== "ADMIN") {
     return (
       <NoAccessPage />
@@ -58,6 +62,7 @@ const HodDashboard = () => {
         withCredentials: true,
       })
       setTickets(response.data.tickets)
+      setFilteredTickets(response.data.tickets)
     } catch (error) {
       console.error(error)
     }
@@ -114,14 +119,42 @@ const HodDashboard = () => {
     }
   }
 
-  const filteredTickets = tickets.filter(
-    (ticket:Ticket) =>
-      ticket.departmentId === user.departmentId &&
-      (statusFilter === "ALL" || ticket.status === statusFilter) &&
-      (searchQuery === "" ||
-        ticket.resource.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        ticket.user.name.toLowerCase().includes(searchQuery.toLowerCase()))  
-      )
+  useEffect(() => {
+    let filtered = tickets;
+
+    // Filter by status
+    if (statusFilter !== "ALL") {
+      filtered = filtered.filter((ticket: Ticket) =>
+        ticket.status.toLowerCase().includes(statusFilter.toLowerCase())
+      );
+    }
+
+    // Filter by search query
+    if (searchQuery) {
+      filtered = filtered.filter(
+        (ticket: Ticket) =>
+          ticket.resource.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          ticket.user.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Filter by date
+
+    const date = dateFilter.split('-');
+
+    const dateQuery = `${date[2]}-${date[1]}-${date[0]}`
+
+   
+    if (dateFilter) {
+      filtered = filtered.filter(
+        (ticket: Ticket) =>
+        
+          ticket.dateRequested.includes(dateQuery)
+      );
+    }
+
+    setFilteredTickets(filtered);
+  }, [searchQuery, statusFilter, dateFilter, tickets]);
 
 
   const containerVariants = {
