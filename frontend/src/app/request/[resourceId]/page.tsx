@@ -220,7 +220,7 @@ const RequestPage = () => {
         requestedQuantity,
         startTime: startTime,
         endTime: endTime,
-        date: date,
+        dateRequested: date,
       }
 
       const response = await axios.post(
