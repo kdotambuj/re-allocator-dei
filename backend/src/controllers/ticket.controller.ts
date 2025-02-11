@@ -11,71 +11,71 @@ interface TicketDataCreate{
     requestedQuantity: number;
     startTime: string;
     endTime: string;
-    requestedDate: string;
+    dateRequested: string;
     resourceId: string;
 }
 
 
 interface TicketSearch{
     resourceId:string;
-    requestedDate:string;
+    dateRequested:string;
     status:TicketStatus;
 }
 
 
-// const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/; // Matches 00:00 - 23:59
-// const dateRegex = /^(0[1-9]|[12]\d|3[01])-(0[1-9]|1[0-2])-\d{4}$/; // Matches DD-MM-YYYY
+const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/; // Matches 00:00 - 23:59
+const dateRegex = /^(0[1-9]|[12]\d|3[01])-(0[1-9]|1[0-2])-\d{4}$/; // Matches DD-MM-YYYY
 
-// export const createTicketSchema = z.object({
-//     userId: z.string().cuid(), // Ensures a valid cuid string
+export const createTicketSchema = z.object({
+    userId: z.string().cuid(), // Ensures a valid cuid string
 
-//     departmentId: z.number()
-//         .int("Department ID should be a whole number")
-//         .positive("Department ID must be positive"),
+    departmentId: z.number()
+        .int("Department ID should be a whole number")
+        .positive("Department ID must be positive"),
 
-//     requestedQuantity: z.number()
-//         .int("Requested quantity should be a whole number")
-//         .positive("Requested quantity must be positive"),
+    requestedQuantity: z.number()
+        .int("Requested quantity should be a whole number")
+        .positive("Requested quantity must be positive"),
 
-//     startTime: z.string()
-//         .regex(timeRegex, "Invalid start time format. Use HH:MM (24-hour format)"),
+    startTime: z.string()
+        .regex(timeRegex, "Invalid start time format. Use HH:MM (24-hour format)"),
 
-//     endTime: z.string()
-//         .regex(timeRegex, "Invalid end time format. Use HH:MM (24-hour format)"),
+    endTime: z.string()
+        .regex(timeRegex, "Invalid end time format. Use HH:MM (24-hour format)"),
 
-//     date: z.string()
-//         .regex(dateRegex, "Invalid date format. Use DD-MM-YYYY")
-//         .refine((date) => {
-//             const [day, month, year] = date.split("-").map(Number);
-//             const parsedDate = new Date(year, month - 1, day);
-//             return !isNaN(parsedDate.getTime()); // Ensures it's a real date
-//         }, "Invalid calendar date"),
+    dateRequested: z.string()
+        .regex(dateRegex, "Invalid date format. Use DD-MM-YYYY")
+        .refine((date) => {
+            const [day, month, year] = date.split("-").map(Number);
+            const parsedDate = new Date(year, month - 1, day);
+            return !isNaN(parsedDate.getTime()); // Ensures it's a real date
+        }, "Invalid calendar date"),
 
-// }).refine(data => {
-//     const [startHour, startMinute] = data.startTime.split(":").map(Number);
-//     const [endHour, endMinute] = data.endTime.split(":").map(Number);
+}).refine(data => {
+    const [startHour, startMinute] = data.startTime.split(":").map(Number);
+    const [endHour, endMinute] = data.endTime.split(":").map(Number);
     
-//     const startTotalMinutes = startHour * 60 + startMinute;
-//     const endTotalMinutes = endHour * 60 + endMinute;
+    const startTotalMinutes = startHour * 60 + startMinute;
+    const endTotalMinutes = endHour * 60 + endMinute;
 
-//     return startTotalMinutes < endTotalMinutes;
-// }, {
-//     message: "Start time must be before end time",
-//     path: ["startTime"],
-// });
+    return startTotalMinutes < endTotalMinutes;
+}, {
+    message: "Start time must be before end time",
+    path: ["startTime"],
+});
 
 
   
 export const createTicket = async (req: Request, res: Response): Promise<any> => {
     try {
         
-        // const parsed = createTicketSchema.safeParse(req.body);
-        // if (!parsed.success) {
-        //     return res.status(400).json({ success: false, error: parsed.error.errors });
-        // }
+        const parsed = createTicketSchema.safeParse(req.body);
+        if (!parsed.success) {
+            return res.status(400).json({ success: false, error: parsed.error.errors });
+        }
 
         const { resourceId } = req.params;
-        const { userId, departmentId, requestedQuantity, startTime, endTime, date } = req.body;
+        const { userId, departmentId, requestedQuantity, startTime, endTime, dateRequested } = parsed.data;
 
         // Check if the resource exists
         const resource = await prisma.resource.findUnique({
@@ -94,7 +94,7 @@ export const createTicket = async (req: Request, res: Response): Promise<any> =>
             requestedQuantity,
             startTime,
             endTime,
-            requestedDate:date,
+            dateRequested,
             resourceId
         }
 
@@ -185,7 +185,7 @@ export const getDailyAvailability = async (req: Request, res: Response): Promise
 
         const ticketQuery:TicketSearch = {
             resourceId,
-            requestedDate: formattedDate,
+            dateRequested: formattedDate,
             status: TicketStatus.APPROVED
         }
 
