@@ -1,4 +1,4 @@
-import { PrismaClient, TicketStatus } from "@prisma/client";
+import { PrismaClient, TicketStatus, } from "@prisma/client";
 import { Request,Response } from "express";
 import {z} from 'zod';
 
