@@ -44,6 +44,24 @@ app.listen(PORT,()=>{
 })
 
 
-app.get('/',(req:Request,res:Response)=>{
-    res.send('Backend Is Running')
-})
+app.get('/', (req: Request, res: Response) => {
+    res.send(`
+        <html>
+            <head>
+                <title>Backend Status</title>
+                <style>
+                    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+                    a { color: #007bff; text-decoration: none; font-size: 18px; }
+                    a:hover { text-decoration: underline; }
+                </style>
+            </head>
+            <body>
+                <h2>Backend is Running Successfully!</h2>
+                <p>You can visit the functional website here:</p>
+                <p><a href="https://re-allocator-dei.vercel.app" target="_blank">Re-Allocator Frontend</a></p>
+            </body>
+        </html>
+    `);
+});
+
+
