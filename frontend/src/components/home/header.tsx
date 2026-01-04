@@ -63,7 +63,7 @@ export default function Header() {
           </li>
           <li>
             <Link href="/departments" className="text-sm hover:underline">
-              Departments
+              Authorities
             </Link>
           </li>
           <li>

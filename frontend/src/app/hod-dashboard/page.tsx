@@ -175,7 +175,7 @@ const HodDashboard = () => {
     !updatingStatus.status?<motion.div className="container mx-auto p-6" initial="hidden" animate="visible" variants={containerVariants}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl font-semibold text-gray-800">HOD Dashboard</CardTitle>
+          <CardTitle className="text-xl font-semibold text-gray-800">Lab Incharge Dashboard</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-6">

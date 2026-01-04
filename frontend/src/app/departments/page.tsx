@@ -78,7 +78,7 @@ const DepartmentsPage = () => {
               <TableRow>
                 <TableHead>ID</TableHead>
                 <TableHead>Name</TableHead>
-                <TableHead>HOD</TableHead>
+                <TableHead>Lab Incharge</TableHead>
                 <TableHead>Email</TableHead>
               </TableRow>
             </TableHeader>

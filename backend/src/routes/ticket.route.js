@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = require("express");
+var auth_middleware_1 = require("../utils/auth.middleware");
+var ticket_controller_1 = require("../controllers/ticket.controller");
+var router = express_1.default.Router();
+router.post('/createTicket/:resourceId', auth_middleware_1.protect, ticket_controller_1.createTicket);
+router.get('/ticket/:ticketId', auth_middleware_1.protect, ticket_controller_1.getTicketById);
+router.get('/tickets', auth_middleware_1.protect, ticket_controller_1.getAllTickets);
+router.get('/availability/:resourceId/:date', auth_middleware_1.protect, ticket_controller_1.getDailyAvailability);
+router.get('/tickets/:hodId', auth_middleware_1.protect, ticket_controller_1.getTicketsByHodId);
+router.get('/user-tickets/:userId', auth_middleware_1.protect, ticket_controller_1.getTicketsByUserId);
+exports.default = router;
